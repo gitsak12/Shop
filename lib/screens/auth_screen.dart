@@ -43,8 +43,8 @@ class AuthScreen extends StatelessWidget {
                     Flexible(
                       child: Container(
                         margin: EdgeInsets.only(bottom: 30.0),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 94.0),
                         //transform: Matrix4.rotationZ(-8 * pi / 180)
                         //..translate(-10.0),
                         // ..translate(-10.0),
@@ -113,16 +113,32 @@ class _AuthCardState extends State<AuthCard> {
       if (_authMode == AuthMode.Login) {
         // Log user in
         await Provider.of<Auth>(context, listen: false)
-            .signIn(_authData['password']!, _authData['email']!);
+            .login(_authData['password']!, _authData['email']!);
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false)
-            .signUp(_authData['email']!, _authData['password']!);
+            .signup(_authData['email']!, _authData['password']!);
       }
-    }  catch (e) {
-      return showDialog(context: context, builder: (context){
-        return AlertDialog(title: Text('Error Occured'),content: Text('Something Went Wrong'),);
-      });
+    } catch (e) {
+      print(e);
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Error Occured'),
+              content: Text('Something Went Wrong'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                    child: Text('Back'))
+              ],
+            );
+          });
     }
     setState(() {
       _isLoading = false;

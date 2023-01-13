@@ -7,7 +7,7 @@ import 'package:shop_app/models/http_exception.dart';
 import 'product.dart';
 
 class Products with ChangeNotifier {
-  final List<Product> _items = [
+  List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -63,27 +63,29 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.parse(
-        'https://flutter-update-94173-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+    final url = Uri.parse('https://flutter-update-94173-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
     try {
       final response = await http.get(url);
-      // print(json.decode(response.body));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      var loadedProducts = _items;
-      extractedData.forEach((prodId, prodData) {
-        loadedProducts.insert(
-            0,
-            Product(
-                id: prodId,
-                title: prodData['title'],
-                description: prodData['description'],
-                price: prodData['price'],
-                imageUrl: prodData['imageUrl'],
-                isFavourite: prodData['isFavourite']));
-        notifyListeners();
-      });
+      print(extractedData);
+      // if (extractedData == null) {
+      //   return;
+      // }
+      // final List<Product> loadedProducts = [];
+      // extractedData.forEach((prodId, prodData) {
+      //   loadedProducts.add(Product(
+      //     id: prodId,
+      //     title: prodData['title'],
+      //     description: prodData['description'],
+      //     price: prodData['price'],
+      //     isFavourite: prodData['isFavourite'],
+      //     imageUrl: prodData['imageUrl'],
+      //   ));
+      // });
+      // loadedProducts.map((e) => items.add(e));
+      notifyListeners();
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
